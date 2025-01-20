@@ -8,8 +8,8 @@ import {
     addDoc,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js";
-import { DateUtils } from "../../shared/utils/DateUtils";
-import { DOMUtils } from "../../shared/utils/DOMUtils";
+import { DateUtils } from "../../../shared/utils/DateUtils.js";
+import { DOMUtils } from "../../../shared/utils/DOMUtils";
 
 export class InvoiceGenerator {
     constructor(companies) {
