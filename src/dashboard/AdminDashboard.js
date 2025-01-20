@@ -1,5 +1,5 @@
 // AdminDashboard.js
-import { auth, db } from "../firebase.js";
+import { db } from "../../../shared/firebase.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
 import { collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js";
 import { TimeEntriesTable } from "./TimeEntriesTable.js";
