@@ -1,7 +1,7 @@
 // TimeEntriesTable.js
 import { collection, query, where, getDocs, updateDoc, doc } from "firebase/firestore";
-import { DOMUtils } from "../../shared/utils/DOMUtils.js";
-import { DateUtils } from "../../shared/utils/DateUtils.js";
+import { DOMUtils } from "../../../shared/utils/DOMUtils.js";
+import { DateUtils } from "../../../shared/utils/DateUtils.js";
 
 export class TimeEntriesTable {
     constructor(db, role, assignedWorkers) {
