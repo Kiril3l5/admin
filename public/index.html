@@ -1,0 +1,65 @@
+---
+layout: default
+title: Hours panel
+description: Input hours 
+featured_image: /images/demo/home.jpg
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ff6b35">
+    <title>Admin Portal - Autonomy Heroes</title>
+    <link rel="stylesheet" href="./public/css/admin.css">
+</head>
+<body>
+    <div id="adminApp">
+        <!-- Loading Screen -->
+        <div id="appLoading" class="app-loading">
+            <div class="spinner" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+
+        <!-- Error Boundary -->
+        <div id="errorBoundary" class="error-boundary" aria-hidden="true">
+            <div class="error-content">
+                <h2>Something went wrong</h2>
+                <p id="errorMessage"></p>
+                <button class="btn-primary" onclick="window.location.reload()">Reload</button>
+            </div>
+        </div>
+
+        <!-- Admin Dashboard -->
+        <div id="adminDashboard" class="dashboard-container">
+            <header>
+                <h1>Admin Dashboard</h1>
+                <p id="adminEmail"></p>
+                <button id="logoutBtn" class="btn-secondary">Logout</button>
+            </header>
+            <section id="timeEntriesSection" class="dashboard-section"></section>
+            <section id="invoiceSection" class="dashboard-section"></section>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="./src/dashboard/AdminDashboard.js"></script>
+	<!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker
+                    .register('/sw.js')
+                    .then((registration) => {
+                        console.log('Service Worker registered successfully:', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.error('Service Worker registration failed:', error);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>
