@@ -1,80 +1,37 @@
 // TimeEntriesTable.js
-import { getFirestore, collection, query, where, getDocs, updateDoc, doc } from "firebase/firestore";
-import { DOMUtils } from "../../shared/utils/DOMUtils";
-import { DateUtils } from "../../shared/utils/DateUtils";
+import { collection, query, where, getDocs, updateDoc, doc } from "firebase/firestore";
+import { DOMUtils } from "../../shared/utils/DOMUtils.js";
+import { DateUtils } from "../../shared/utils/DateUtils.js";
 
 export class TimeEntriesTable {
     constructor(db, role, assignedWorkers) {
-        if (!db || !role) throw new Error("Firestore instance and user role are required.");
-
         this.db = db;
         this.role = role;
         this.assignedWorkers = assignedWorkers;
         this.entries = [];
-        this.isLoading = false;
-    }
-
-    async fetchEntries() {
-        console.log("Fetching time entries...");
         this.isLoading = true;
+    }
 
-        const filters = [];
-        if (this.role === "manager") {
-            filters.push(where("workerId", "in", this.assignedWorkers));
-        }
-
+    async loadEntries() {
         try {
-            const q = query(collection(this.db, "timeEntries"), ...filters);
-            const querySnapshot = await getDocs(q);
-            this.entries = querySnapshot.docs.map((doc) => ({
-                id: doc.id,
-                ...doc.data(),
-            }));
-            console.log("Fetched entries:", this.entries);
-        } catch (error) {
-            console.error("Error fetching entries:", error);
-            alert("Failed to load time entries. Please try again.");
-        } finally {
+            const q = this.role === "manager"
+                ? query(collection(this.db, "timeEntries"), where("workerId", "in", this.assignedWorkers))
+                : query(collection(this.db, "timeEntries"));
+
+            const snapshot = await getDocs(q);
+            this.entries = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
             this.isLoading = false;
-        }
-    }
-
-    async approveEntry(entryId) {
-        try {
-            console.log(`Approving entry: ${entryId}`);
-            const entryDoc = doc(this.db, "timeEntries", entryId);
-            await updateDoc(entryDoc, { status: "approved" });
-            alert("Entry approved successfully!");
-            await this.fetchEntries(); // Refresh entries
-            this.render();
         } catch (error) {
-            console.error("Error approving entry:", error);
-            alert("Failed to approve entry. Please try again.");
-        }
-    }
-
-    async rejectEntry(entryId) {
-        try {
-            console.log(`Rejecting entry: ${entryId}`);
-            const entryDoc = doc(this.db, "timeEntries", entryId);
-            await updateDoc(entryDoc, { status: "rejected" });
-            alert("Entry rejected successfully!");
-            await this.fetchEntries(); // Refresh entries
-            this.render();
-        } catch (error) {
-            console.error("Error rejecting entry:", error);
-            alert("Failed to reject entry. Please try again.");
+            console.error("Error loading time entries:", error);
+            alert("Failed to load time entries.");
         }
     }
 
     render(container) {
         if (!container) throw new Error("Container element is required.");
-        console.log("Rendering Time Entries Table...");
 
-        // Clear existing content
         DOMUtils.removeAllChildren(container);
 
-        // Show loading state
         if (this.isLoading) {
             const loadingMessage = DOMUtils.createElement("p", {
                 text: "Loading time entries...",
@@ -84,11 +41,9 @@ export class TimeEntriesTable {
             return;
         }
 
-        // Render table
         const table = DOMUtils.createElement("table", { className: "time-entries-table" });
         container.appendChild(table);
 
-        // Table header
         const thead = DOMUtils.createElement("thead");
         thead.innerHTML = `
             <tr>
@@ -101,7 +56,6 @@ export class TimeEntriesTable {
         `;
         table.appendChild(thead);
 
-        // Table body
         const tbody = DOMUtils.createElement("tbody");
         this.entries.forEach((entry) => {
             const row = DOMUtils.createElement("tr");
@@ -116,14 +70,12 @@ export class TimeEntriesTable {
             const approveButton = DOMUtils.createElement("button", {
                 text: "Approve",
                 className: "approve-button",
-                attributes: { "data-id": entry.id },
             });
             approveButton.addEventListener("click", () => this.approveEntry(entry.id));
 
             const rejectButton = DOMUtils.createElement("button", {
                 text: "Reject",
                 className: "reject-button",
-                attributes: { "data-id": entry.id },
             });
             rejectButton.addEventListener("click", () => this.rejectEntry(entry.id));
 
@@ -134,14 +86,25 @@ export class TimeEntriesTable {
             tbody.appendChild(row);
         });
         table.appendChild(tbody);
+    }
 
-        // Show no data message if necessary
-        if (this.entries.length === 0) {
-            const noDataMessage = DOMUtils.createElement("p", {
-                text: "No time entries found.",
-                className: "no-data-message",
-            });
-            container.appendChild(noDataMessage);
+    async approveEntry(entryId) {
+        try {
+            await updateDoc(doc(this.db, "timeEntries", entryId), { status: "approved" });
+            alert("Entry approved successfully.");
+        } catch (error) {
+            console.error("Error approving entry:", error);
+            alert("Failed to approve entry.");
+        }
+    }
+
+    async rejectEntry(entryId) {
+        try {
+            await updateDoc(doc(this.db, "timeEntries", entryId), { status: "rejected" });
+            alert("Entry rejected successfully.");
+        } catch (error) {
+            console.error("Error rejecting entry:", error);
+            alert("Failed to reject entry.");
         }
     }
 }

@@ -1,15 +1,22 @@
 // InvoiceGenerator.js
-import { collection, query, where, getDocs, addDoc, serverTimestamp } from "firebase/firestore";
+import { db } from "../firebase.js";
+import {
+    collection,
+    query,
+    where,
+    getDocs,
+    addDoc,
+    serverTimestamp
+} from "https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js";
 import { DateUtils } from "../../shared/utils/DateUtils";
 import { DOMUtils } from "../../shared/utils/DOMUtils";
 
 export class InvoiceGenerator {
-    constructor(db, companies) {
-        if (!db || !Array.isArray(companies)) {
-            throw new Error("Firestore instance and companies list are required.");
+    constructor(companies) {
+        if (!Array.isArray(companies)) {
+            throw new Error("Companies list is required.");
         }
 
-        this.db = db;
         this.companies = companies;
         this.generatedInvoices = [];
     }
@@ -17,7 +24,7 @@ export class InvoiceGenerator {
     async fetchApprovedEntries(companyId, startDate, endDate) {
         console.log("Fetching approved time entries for invoicing...");
         const q = query(
-            collection(this.db, "timeEntries"),
+            collection(db, "timeEntries"),
             where("companyId", "==", companyId),
             where("status", "==", "approved"),
             where("date", ">=", DateUtils.normalizeDate(startDate).toISOString()),
@@ -54,7 +61,7 @@ export class InvoiceGenerator {
                 generatedAt: serverTimestamp(),
             };
 
-            const invoiceRef = await addDoc(collection(this.db, "invoices"), invoiceData);
+            const invoiceRef = await addDoc(collection(db, "invoices"), invoiceData);
             this.generatedInvoices.push({ ...invoiceData, id: invoiceRef.id });
 
             console.log("Invoice generated successfully:", invoiceData);
@@ -70,15 +77,11 @@ export class InvoiceGenerator {
     render(container) {
         if (!container) throw new Error("Container element is required.");
         console.log("Rendering Invoice Generator...");
-
-        // Clear container
         DOMUtils.removeAllChildren(container);
 
-        // Form for generating invoices
         const form = DOMUtils.createElement("form", { className: "invoice-form" });
         container.appendChild(form);
 
-        // Company selector
         const companySelect = DOMUtils.createElement("select", { className: "company-select" });
         this.companies.forEach((company) => {
             const option = DOMUtils.createElement("option", {
@@ -89,7 +92,6 @@ export class InvoiceGenerator {
         });
         form.appendChild(companySelect);
 
-        // Date pickers
         const startDateInput = DOMUtils.createElement("input", {
             attributes: { type: "date", id: "startDate" },
         });
@@ -100,18 +102,15 @@ export class InvoiceGenerator {
         });
         form.appendChild(endDateInput);
 
-        // Generate button
         const generateButton = DOMUtils.createElement("button", {
             text: "Generate Invoice",
             attributes: { type: "submit" },
         });
         form.appendChild(generateButton);
 
-        // Invoices list section
         const invoicesList = DOMUtils.createElement("div", { className: "invoices-list" });
         container.appendChild(invoicesList);
 
-        // Form submission event
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
 
@@ -128,7 +127,6 @@ export class InvoiceGenerator {
             await this.generateInvoice(companyId, companyName, startDate, endDate);
         });
 
-        // Initial rendering of invoices list
         this.renderInvoicesList(invoicesList);
     }
 
