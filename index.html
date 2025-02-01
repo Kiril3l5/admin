@@ -7,11 +7,11 @@
     <meta name="theme-color" content="#ff8d00">
     <title>Admin Portal - Autonomy Heroes</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script type="module" crossorigin src="/assets/main-CXRwp8TA.js"></script>
+  <script type="module" crossorigin src="/assets/main-CLCK0B7N.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/vendor-firebase-q4K5YV9j.js">
   <link rel="modulepreload" crossorigin href="/assets/vendor-utils-B8p85eXh.js">
   <link rel="modulepreload" crossorigin href="/assets/vendor-components-DnukZakY.js">
-  <link rel="stylesheet" crossorigin href="/assets/main-DhWNMoeR.css">
+  <link rel="stylesheet" crossorigin href="/assets/main-By00_Suw.css">
 </head>
 <body>
     <script>
@@ -38,34 +38,34 @@
         </div>
 
         <!-- Auth Container -->
-        <div id="authContainer" class="auth-container active">
-            <div class="auth-header">
-                <h1>Admin Portal</h1>
-                <p>Manage users and time entries efficiently</p>
-            </div>
-            <form id="loginForm" class="auth-form">
-                <input 
-                    type="email" 
-                    id="email" 
-                    name="email" 
-                    placeholder="Email" 
-                    autocomplete="username" 
-                    required
-                >
-                <input 
-                    type="password" 
-                    id="password" 
-                    name="password" 
-                    placeholder="Password" 
-                    autocomplete="current-password" 
-                    required
-                >
-                <button type="submit" class="btn-primary">Login</button>
-            </form>
-              <div id="authErrorContainer" class="auth-error">
-                <p id="authErrorMessage"></p>
-              </div>
-        </div>
+<div id="authContainer" class="auth-container">  <!-- Remove 'active' class -->
+    <div class="auth-header">
+        <h1>Admin Portal</h1>
+        <p>Manage users and time entries efficiently</p>
+    </div>
+    <form id="loginForm" class="auth-form active">  <!-- Add 'active' class -->
+        <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            placeholder="Email" 
+            autocomplete="username" 
+            required
+        >
+        <input 
+            type="password" 
+            id="password" 
+            name="password" 
+            placeholder="Password" 
+            autocomplete="current-password" 
+            required
+        >
+        <button type="submit" class="btn-primary">Login</button>
+    </form>
+    <div id="authErrorContainer" class="auth-error">
+        <p id="authErrorMessage"></p>
+    </div>
+</div>
 
         <!-- Admin Dashboard -->
         <div id="adminDashboard" class="dashboard-container" style="display: none;">
