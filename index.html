@@ -7,19 +7,13 @@
     <meta name="theme-color" content="#ff8d00">
     <title>Admin Portal - Autonomy Heroes</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script type="module" crossorigin src="/assets/main-Cix9ntZU.js"></script>
+  <script type="module" crossorigin src="/assets/main-B6yHAlB6.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/vendor-firebase-q4K5YV9j.js">
   <link rel="modulepreload" crossorigin href="/assets/vendor-utils-B8p85eXh.js">
   <link rel="modulepreload" crossorigin href="/assets/vendor-components-YG54Fj6O.js">
-  <link rel="stylesheet" crossorigin href="/assets/main-CxKamJXk.css">
+  <link rel="stylesheet" crossorigin href="/assets/main-BsaUIoSI.css">
 </head>
 <body>
-    <script>
-        window.onerror = function(msg, url, lineNo, columnNo, error) {
-            console.error('Global error:', {msg, url, lineNo, columnNo, error});
-            return false;
-        };
-        </script>
     <div id="adminApp">
         <!-- Loading Screen -->
         <div id="appLoading" class="app-loading">
@@ -28,49 +22,39 @@
             </div>
         </div>
 
-        <!-- Error Boundary -->
-        <div id="errorBoundary" class="error-boundary" aria-hidden="true">
-            <div class="error-content">
-                <h2>Something went wrong</h2>
-                <p id="errorMessage"></p>
-                <button class="btn-primary" onclick="window.location.reload()">Reload</button>
+        <!-- Auth Container -->
+        <div id="authContainer" class="auth-container">
+            <div class="auth-header">
+                <h1>Admin Portal</h1>
+                <p>Manage users and time entries efficiently</p>
+            </div>
+            <form id="loginForm" class="auth-form active">
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    placeholder="Email" 
+                    autocomplete="username" 
+                    required
+                >
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    placeholder="Password" 
+                    autocomplete="current-password" 
+                    required
+                >
+                <button type="submit" class="btn-primary">Login</button>
+            </form>
+            <div id="authErrorContainer" class="auth-error">
+                <p id="authErrorMessage"></p>
             </div>
         </div>
 
-        <!-- Auth Container -->
-<div id="authContainer" class="auth-container">  <!-- Remove 'active' class -->
-    <div class="auth-header">
-        <h1>Admin Portal</h1>
-        <p>Manage users and time entries efficiently</p>
+        <!-- Admin Dashboard Container -->
+        <div id="adminDashboard" class="dashboard-container"></div>
     </div>
-    <form id="loginForm" class="auth-form active">  <!-- Add 'active' class -->
-        <input 
-            type="email" 
-            id="email" 
-            name="email" 
-            placeholder="Email" 
-            autocomplete="username" 
-            required
-        >
-        <input 
-            type="password" 
-            id="password" 
-            name="password" 
-            placeholder="Password" 
-            autocomplete="current-password" 
-            required
-        >
-        <button type="submit" class="btn-primary">Login</button>
-    </form>
-    <div id="authErrorContainer" class="auth-error">
-        <p id="authErrorMessage"></p>
-    </div>
-</div>
-
-        <!-- Admin Dashboard -->
-        <div id="adminDashboard" class="dashboard-container" style="display: none;">
-            <!-- The content will be dynamically inserted by AdminDashboard.js -->
-        </div>
 
     <!-- Scripts -->
 </body>
